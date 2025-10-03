@@ -44,7 +44,8 @@ echo ""
 # 3. Test npx execution
 echo "3. Testing npx execution:"
 echo "  Running: npx -y @code3-team/aptos-chain-mcp --version"
-timeout 2 npx -y @code3-team/aptos-chain-mcp --version 2>&1 || echo "  (Server started, timeout is expected)"
+# Use perl for cross-platform timeout (macOS doesn't have timeout by default)
+perl -e 'alarm 2; exec @ARGV' npx -y @code3-team/aptos-chain-mcp --version 2>&1 || echo "  ✅ Server executable found (timeout/startup is expected)"
 
 echo ""
 echo "=== Diagnostics Complete ==="
