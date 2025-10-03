@@ -50,17 +50,28 @@ You can now start Claude Code with MCP servers configured.
 
 ### 3. 配置 MCP 服务器
 
-本项目已包含 `.mcp.json` 配置文件，定义了两个 MCP 服务器：
+本项目已包含 `.mcp.json` 配置文件，定义了三个 MCP 服务器：
 
 #### aptos-chain-mcp
 - **功能**: 与 Aptos 区块链交互（创建赏金、接受赏金、领取奖励等）
-- **包名**: `@code3-team/aptos-chain-mcp`
-- **安装方式**: 自动通过 npx 安装
+- **命令**: `aptos-chain-mcp`
+- **运行方式**: 通过 pnpm link 链接到全局，直接调用命令
+
+#### spec-kit-mcp
+- **功能**: 工作流工具（specify、plan、tasks）
+- **命令**: `spec-kit-mcp`
+- **运行方式**: 通过 pnpm link 链接到全局，直接调用命令
 
 #### GitHub Copilot MCP
 - **功能**: GitHub 仓库操作（创建 Issue、PR、Fork 等）
 - **连接方式**: HTTP transport 连接到 GitHub Copilot API
 - **认证**: 通过 `GITHUB_PERSONAL_ACCESS_TOKEN` 环境变量
+
+**本地开发配置说明**：
+- ✅ 使用 `pnpm link --global` 将本地包链接到全局
+- ✅ 修改代码后重新构建（`cd Code3/spec-mcp/<package> && pnpm build`）
+- ✅ 无需重新 link，更改会立即生效
+- ✅ 调试方便，可直接修改源码并测试
 
 ### 4. 验证配置
 

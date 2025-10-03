@@ -1,7 +1,8 @@
 {
   "mcpServers": {
     "aptos-chain": {
-      "command": "aptos-chain-mcp",
+      "command": "npx",
+      "args": ["-y", "@code3-team/aptos-chain-mcp"],
       "env": {
         "APTOS_CONTRACT_ADDRESS": "${APTOS_CONTRACT_ADDRESS}",
         "APTOS_PRIVATE_KEY": "${APTOS_PRIVATE_KEY}",
@@ -16,7 +17,8 @@
       }
     },
     "spec-kit": {
-      "command": "spec-kit-mcp"
+      "command": "npx",
+      "args": ["-y", "@code3-team/spec-kit-mcp"]
     }
   }
 }

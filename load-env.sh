@@ -18,6 +18,13 @@ if [ ! -f "$ENV_FILE" ]; then
     return 1
 fi
 
+# Setup pnpm global bin directory
+export PNPM_HOME="/Users/hhh0x/Library/pnpm"
+case ":$PATH:" in
+  *":$PNPM_HOME:"*) ;;
+  *) export PATH="$PNPM_HOME:$PATH" ;;
+esac
+
 # Read .env file and export variables
 set -a
 source "$ENV_FILE"

@@ -34,18 +34,29 @@ fi
 
 echo ""
 
-# 2. Check npm package availability
-echo "2. Checking npm package:"
-NPM_VERSION=$(npm view @code3-team/aptos-chain-mcp version 2>&1 | tail -1)
-echo "  Latest version: $NPM_VERSION"
+# 2. Check pnpm global bin directory
+echo "2. Checking pnpm setup:"
+if [ -z "$PNPM_HOME" ]; then
+    echo "  ❌ PNPM_HOME not set"
+else
+    echo "  ✅ PNPM_HOME: $PNPM_HOME"
+fi
 
 echo ""
 
-# 3. Test npx execution
-echo "3. Testing npx execution:"
-echo "  Running: npx -y @code3-team/aptos-chain-mcp --version"
-# Use perl for cross-platform timeout (macOS doesn't have timeout by default)
-perl -e 'alarm 2; exec @ARGV' npx -y @code3-team/aptos-chain-mcp --version 2>&1 || echo "  ✅ Server executable found (timeout/startup is expected)"
+# 3. Check MCP commands availability
+echo "3. Checking MCP commands:"
+if command -v aptos-chain-mcp &> /dev/null; then
+    echo "  ✅ aptos-chain-mcp: $(which aptos-chain-mcp)"
+else
+    echo "  ❌ aptos-chain-mcp not found in PATH"
+fi
+
+if command -v spec-kit-mcp &> /dev/null; then
+    echo "  ✅ spec-kit-mcp: $(which spec-kit-mcp)"
+else
+    echo "  ❌ spec-kit-mcp not found in PATH"
+fi
 
 echo ""
 echo "=== Diagnostics Complete ==="
