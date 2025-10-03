@@ -3,7 +3,14 @@
 # Load environment variables from .env file
 # Usage: source ./load-env.sh
 
-ENV_FILE="${BASH_SOURCE%/*}/.env"
+# Get script directory (works when sourced or executed)
+if [ -n "${BASH_SOURCE[0]}" ]; then
+    SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+else
+    SCRIPT_DIR="$(pwd)"
+fi
+
+ENV_FILE="$SCRIPT_DIR/.env"
 
 if [ ! -f "$ENV_FILE" ]; then
     echo "Error: .env file not found at $ENV_FILE"
