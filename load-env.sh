@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Load environment variables from .env file
+# Usage: source ./load-env.sh
+
+ENV_FILE="${BASH_SOURCE%/*}/.env"
+
+if [ ! -f "$ENV_FILE" ]; then
+    echo "Error: .env file not found at $ENV_FILE"
+    echo "Please copy .env.template to .env and fill in your credentials"
+    return 1
+fi
+
+# Read .env file and export variables
+set -a
+source "$ENV_FILE"
+set +a
+
+echo "✅ Environment variables loaded from .env"
+echo ""
+echo "Loaded variables:"
+echo "  - GITHUB_PERSONAL_ACCESS_TOKEN: ${GITHUB_PERSONAL_ACCESS_TOKEN:0:20}..."
+echo "  - APTOS_NETWORK: $APTOS_NETWORK"
+echo "  - APTOS_CONTRACT_ADDRESS: $APTOS_CONTRACT_ADDRESS"
+echo "  - APTOS_PRIVATE_KEY: ${APTOS_PRIVATE_KEY:0:10}..."
+echo "  - TEST_REPO: $TEST_REPO"
+echo ""
+echo "You can now start Claude Code with MCP servers configured."

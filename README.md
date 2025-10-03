@@ -22,7 +22,33 @@ cp .env.template .env
   - 获取方式：`cat ~/.aptos/config.yaml | grep private_key`
   - 或创建新账户：`aptos init --network testnet`
 
-### 2. 配置 MCP 服务器
+### 2. 加载环境变量
+
+在启动 Claude Code 之前，需要将 `.env` 文件中的变量加载到 shell 环境中：
+
+```bash
+cd /Users/hhh0x/workflows/doing/Code3-Workspace
+source ./load-env.sh
+```
+
+你应该看到类似以下的输出：
+
+```
+✅ Environment variables loaded from .env
+
+Loaded variables:
+  - GITHUB_PERSONAL_ACCESS_TOKEN: github_pat_11AABBC...
+  - APTOS_NETWORK: testnet
+  - APTOS_CONTRACT_ADDRESS: 0xafd0c08dbf36230f9b96eb1d23ff7ee223ad40be47917a0aba310ed90ac422a1
+  - APTOS_PRIVATE_KEY: 0x1234567...
+  - TEST_REPO: cyl19970726/Code3-Workspace
+
+You can now start Claude Code with MCP servers configured.
+```
+
+**重要**: 每次打开新的 terminal 会话时，都需要重新运行 `source ./load-env.sh`，因为环境变量只在当前 shell 会话中有效。
+
+### 3. 配置 MCP 服务器
 
 本项目已包含 `.mcp.json` 配置文件，定义了两个 MCP 服务器：
 
@@ -36,7 +62,7 @@ cp .env.template .env
 - **连接方式**: HTTP transport 连接到 GitHub Copilot API
 - **认证**: 通过 `GITHUB_PERSONAL_ACCESS_TOKEN` 环境变量
 
-### 3. 验证配置
+### 4. 验证配置
 
 在 Claude Code 中测试 MCP 服务器是否正常工作：
 
@@ -66,6 +92,7 @@ Code3-Workspace/
 ├── .mcp.json            # MCP 服务器配置
 ├── .env.template        # 环境变量模板
 ├── .env                 # 环境变量（不要提交到 git）
+├── load-env.sh          # 环境变量加载脚本
 ├── .gitignore           # Git 忽略文件
 ├── LICENSE              # MIT 许可证
 └── README.md            # 本文件
