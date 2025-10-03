@@ -1,0 +1,20 @@
+{
+  "mcpServers": {
+    "aptos-chain": {
+      "command": "npx",
+      "args": ["-y", "@code3-team/aptos-chain-mcp"],
+      "env": {
+        "APTOS_CONTRACT_ADDRESS": "${APTOS_CONTRACT_ADDRESS}",
+        "APTOS_PRIVATE_KEY": "${APTOS_PRIVATE_KEY}",
+        "APTOS_NETWORK": "${APTOS_NETWORK:-testnet}"
+      }
+    },
+    "github": {
+      "type": "http",
+      "url": "https://api.githubcopilot.com/mcp",
+      "headers": {
+        "Authorization": "Bearer ${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
+    }
+  }
+}
