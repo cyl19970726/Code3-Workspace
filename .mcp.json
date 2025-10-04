@@ -1,0 +1,7 @@
+{
+  "mcpServers": {
+    "spec-kit": {
+      "command": "spec-kit-mcp"
+    }
+  }
+}
