@@ -11,6 +11,9 @@ export const TaskSchema = z.object({
   createdAt: z.string().datetime(),
   completedAt: z.string().datetime().nullable(),
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/), // YYYY-MM-DD format
+  priority: z.enum(['High', 'Medium', 'Low', 'Unassigned']).default('Unassigned').catch('Unassigned'),
+  estimatedMinutes: z.number().nullable().default(null).catch(null),
+  actualMinutes: z.number().nullable().default(null).catch(null),
 });
 
 export type Task = z.infer<typeof TaskSchema>;
@@ -22,6 +25,8 @@ export type Task = z.infer<typeof TaskSchema>;
 export const UserPreferencesSchema = z.object({
   lastViewedDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
   sortOrder: z.enum(['newest-first', 'oldest-first']),
+  sortByPriority: z.boolean().default(false).catch(false),
+  showTimeWarnings: z.boolean().default(true).catch(true),
 });
 
 export type UserPreferences = z.infer<typeof UserPreferencesSchema>;
@@ -99,6 +104,8 @@ export function createInitialAppData(): AppData {
     preferences: {
       lastViewedDate: today,
       sortOrder: 'newest-first',
+      sortByPriority: false,
+      showTimeWarnings: true,
     },
   };
 }

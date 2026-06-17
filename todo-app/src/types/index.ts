@@ -9,11 +9,16 @@ export interface Task {
   createdAt: string; // ISO timestamp
   completedAt: string | null; // ISO timestamp
   date: string; // YYYY-MM-DD
+  priority: 'High' | 'Medium' | 'Low' | 'Unassigned';
+  estimatedMinutes: number | null;
+  actualMinutes: number | null;
 }
 
 export interface UserPreferences {
   lastViewedDate: string; // YYYY-MM-DD
   sortOrder: 'newest-first' | 'oldest-first';
+  sortByPriority: boolean;
+  showTimeWarnings: boolean;
 }
 
 export interface StorageMetadata {
@@ -34,4 +39,26 @@ export type SortOrder = 'newest-first' | 'oldest-first';
 
 export interface TaskCounts {
   [date: string]: number; // YYYY-MM-DD -> count
+}
+
+export interface DayStatistics {
+  date: string;
+  totalEstimatedMinutes: number;
+  totalActualMinutes: number;
+  taskCount: number;
+  completedCount: number;
+  priorityCounts: {
+    High: number;
+    Medium: number;
+    Low: number;
+    Unassigned: number;
+  };
+}
+
+export interface TimeEntry {
+  taskId: string;
+  estimatedMinutes: number | null;
+  actualMinutes: number;
+  completedAt: string;
+  variance: number | null;
 }

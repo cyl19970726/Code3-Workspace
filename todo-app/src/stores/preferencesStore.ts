@@ -9,10 +9,14 @@ interface PreferencesStore {
   // State
   lastViewedDate: string; // YYYY-MM-DD
   sortOrder: SortOrder;
+  sortByPriority: boolean;
+  showTimeWarnings: boolean;
 
   // Actions
   setLastViewedDate: (date: string) => Promise<void>;
   setSortOrder: (sortOrder: SortOrder) => Promise<void>;
+  setSortByPriority: (sortByPriority: boolean) => Promise<void>;
+  setShowTimeWarnings: (showTimeWarnings: boolean) => Promise<void>;
   loadPreferences: () => Promise<void>;
 }
 
@@ -22,6 +26,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
       // Initial state
       lastViewedDate: getTodayISO(),
       sortOrder: 'newest-first',
+      sortByPriority: false,
+      showTimeWarnings: true,
 
       // Load preferences from storage
       loadPreferences: async () => {
@@ -34,6 +40,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
             set({
               lastViewedDate: initialData.preferences.lastViewedDate,
               sortOrder: initialData.preferences.sortOrder,
+              sortByPriority: initialData.preferences.sortByPriority,
+              showTimeWarnings: initialData.preferences.showTimeWarnings,
             });
             return;
           }
@@ -41,6 +49,8 @@ export const usePreferencesStore = create<PreferencesStore>()(
           set({
             lastViewedDate: data.preferences.lastViewedDate,
             sortOrder: data.preferences.sortOrder,
+            sortByPriority: data.preferences.sortByPriority,
+            showTimeWarnings: data.preferences.showTimeWarnings,
           });
         } catch (error) {
           console.error('Failed to load preferences:', error);
@@ -98,6 +108,58 @@ export const usePreferencesStore = create<PreferencesStore>()(
           set({ sortOrder });
         } catch (error) {
           console.error('Failed to save sort order:', error);
+        }
+      },
+
+      setSortByPriority: async (sortByPriority: boolean) => {
+        try {
+          const currentData = readStorage();
+          if (!currentData) {
+            throw new Error('No data found');
+          }
+
+          const updatedData = {
+            ...currentData,
+            preferences: {
+              ...currentData.preferences,
+              sortByPriority,
+            },
+            metadata: {
+              ...currentData.metadata,
+              lastModified: new Date().toISOString(),
+            },
+          };
+
+          await atomicWrite(updatedData);
+          set({ sortByPriority });
+        } catch (error) {
+          console.error('Failed to save sortByPriority:', error);
+        }
+      },
+
+      setShowTimeWarnings: async (showTimeWarnings: boolean) => {
+        try {
+          const currentData = readStorage();
+          if (!currentData) {
+            throw new Error('No data found');
+          }
+
+          const updatedData = {
+            ...currentData,
+            preferences: {
+              ...currentData.preferences,
+              showTimeWarnings,
+            },
+            metadata: {
+              ...currentData.metadata,
+              lastModified: new Date().toISOString(),
+            },
+          };
+
+          await atomicWrite(updatedData);
+          set({ showTimeWarnings });
+        } catch (error) {
+          console.error('Failed to save showTimeWarnings:', error);
         }
       },
     }),
