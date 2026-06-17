@@ -14,7 +14,7 @@ interface TaskStore {
 
   // Actions
   loadTasks: () => Promise<void>;
-  addTask: (description: string, date?: string) => Promise<void>;
+  addTask: (description: string, date?: string, priority?: Task['priority'], estimatedMinutes?: number | null) => Promise<void>;
   updateTask: (id: string, updates: Partial<Task>) => Promise<void>;
   deleteTask: (id: string) => Promise<void>;
   toggleTaskCompletion: (id: string) => Promise<void>;
@@ -56,7 +56,7 @@ export const useTaskStore = create<TaskStore>()(
       },
 
       // Add new task
-      addTask: async (description: string, date?: string) => {
+      addTask: async (description: string, date?: string, priority: Task['priority'] = 'Unassigned', estimatedMinutes: number | null = null) => {
         const trimmedDescription = description.trim();
 
         if (trimmedDescription.length === 0) {
@@ -77,6 +77,9 @@ export const useTaskStore = create<TaskStore>()(
             createdAt: new Date().toISOString(),
             completedAt: null,
             date: date || getTodayISO(),
+            priority,
+            estimatedMinutes,
+            actualMinutes: null,
           };
 
           const currentData = readStorage() || createInitialAppData();
@@ -179,6 +182,7 @@ export const useTaskStore = create<TaskStore>()(
                 ...task,
                 completed: !task.completed,
                 completedAt: !task.completed ? new Date().toISOString() : null,
+                actualMinutes: !task.completed ? task.actualMinutes : null,
               };
             }
             return task;

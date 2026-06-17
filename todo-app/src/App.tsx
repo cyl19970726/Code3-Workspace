@@ -18,6 +18,7 @@ import ErrorBanner from './components/ErrorBanner';
 // Lazy-loaded dialog components (code splitting)
 const DeleteConfirmDialog = lazy(() => import('./components/DeleteConfirmDialog'));
 const EditTaskDialog = lazy(() => import('./components/EditTaskDialog'));
+const ActualTimeDialog = lazy(() => import('./components/ActualTimeDialog'));
 
 import type { Task } from './types';
 
@@ -25,6 +26,7 @@ function App() {
   const [isInitialized, setIsInitialized] = useState(false);
   const [deleteTaskId, setDeleteTaskId] = useState<string | null>(null);
   const [editTask, setEditTask] = useState<Task | null>(null);
+  const [completingTask, setCompletingTask] = useState<Task | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Stores
@@ -128,12 +130,34 @@ function App() {
   );
 
   // Handlers
-  const handleAddTask = (description: string) => {
-    addTask(description, selectedDate);
+  const handleAddTask = (description: string, priority: Task['priority'], estimatedMinutes: number | null) => {
+    addTask(description, selectedDate, priority, estimatedMinutes);
   };
 
   const handleToggleTask = (id: string) => {
     toggleTaskCompletion(id);
+  };
+
+  const handleRequestComplete = (task: Task) => {
+    setCompletingTask(task);
+  };
+
+  const handleSaveActualTime = (actualMinutes: number) => {
+    if (completingTask) {
+      updateTask(completingTask.id, {
+        completed: true,
+        completedAt: new Date().toISOString(),
+        actualMinutes,
+      });
+      setCompletingTask(null);
+    }
+  };
+
+  const handleSkipActualTime = () => {
+    if (completingTask) {
+      toggleTaskCompletion(completingTask.id);
+      setCompletingTask(null);
+    }
   };
 
   const handleEditTask = (id: string) => {
@@ -143,9 +167,9 @@ function App() {
     }
   };
 
-  const handleSaveEdit = (description: string) => {
+  const handleSaveEdit = (description: string, priority: Task['priority'], estimatedMinutes: number | null) => {
     if (editTask) {
-      updateTask(editTask.id, { description });
+      updateTask(editTask.id, { description, priority, estimatedMinutes });
     }
   };
 
@@ -244,6 +268,7 @@ function App() {
             onToggle={handleToggleTask}
             onEdit={handleEditTask}
             onDelete={handleDeleteTask}
+            onRequestComplete={handleRequestComplete}
             readOnly={isReadOnlyMode}
           />
         )}
@@ -267,6 +292,17 @@ function App() {
             onClose={() => setEditTask(null)}
             onSave={handleSaveEdit}
             task={editTask}
+          />
+        </Suspense>
+
+        {/* Actual Time Dialog */}
+        <Suspense fallback={null}>
+          <ActualTimeDialog
+            isOpen={completingTask !== null}
+            onClose={() => setCompletingTask(null)}
+            onSave={handleSaveActualTime}
+            onSkip={handleSkipActualTime}
+            taskDescription={completingTask?.description || ''}
           />
         </Suspense>
 

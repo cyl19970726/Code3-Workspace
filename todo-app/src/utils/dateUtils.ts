@@ -34,7 +34,7 @@ export function formatDate(
  */
 export function getTodayISO(): string {
   const now = new Date();
-  return now.toISOString().split('T')[0];
+  return now.toISOString().split('T')[0] || '';
 }
 
 /**
@@ -49,9 +49,9 @@ export function isValidDateString(dateString: string): boolean {
 
   // Check if valid date
   const parts = dateString.split('-');
-  const year = parseInt(parts[0], 10);
-  const month = parseInt(parts[1], 10);
-  const day = parseInt(parts[2], 10);
+  const year = parseInt(parts[0] || '0', 10);
+  const month = parseInt(parts[1] || '0', 10);
+  const day = parseInt(parts[2] || '0', 10);
 
   // Validate ranges
   if (month < 1 || month > 12) {
