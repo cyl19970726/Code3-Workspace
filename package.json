@@ -1,0 +1,15 @@
+{
+  "name": "code3-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Code3 workspace — payment integration E2E tests (spec 003)",
+  "scripts": {
+    "test": "node --test tests/unit/*.test.js tests/e2e/*.e2e.test.js",
+    "test:unit": "node --test tests/unit/*.test.js",
+    "test:e2e": "node --test tests/e2e/*.e2e.test.js"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
